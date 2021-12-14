@@ -82,7 +82,7 @@ In addition to installing the required software, the following environment confi
     
     **Example:** The Terraform variable file provided would create the following topology-
 
-    ![Sample Lab Topology](artwork/example_lab.jpg)
+    ![Sample Lab Topology](artwork/example_lab.JPG)
 
 # EXPLORING THE PROJECT VARIABLES FILE
 The project variables file, **lab-variables.auto.tfvars** is where you will define how the lab will be created.
