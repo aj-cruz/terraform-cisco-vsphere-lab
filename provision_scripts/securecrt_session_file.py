@@ -40,7 +40,7 @@ parser.add_argument(
 args = parser.parse_args()
 
 if __name__ == "__main__":
-    # Convert binary port number to 8-digit hexadecimal
+    # Convert decimal port number to 8-digit hexadecimal
     hex_telnet_port = str(hex(int(args.telnet_port))).lstrip("0x")
     for i in range(len(hex_telnet_port), 8):
         hex_telnet_port = "0" + hex_telnet_port
