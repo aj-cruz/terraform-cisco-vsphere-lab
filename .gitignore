@@ -1,0 +1,12 @@
+# Ignore Terraform init files
+.terraform*
+*.tfstate*
+
+# Ignore vSphere VM images
+*.ova
+
+# Ignore local environment variables
+environment.env
+
+# Ignore cleanup shell script (for deleting all Terraform ini files
+cleanup.sh
