@@ -78,7 +78,7 @@ In addition to installing the required software, the following environment confi
 1. Before you begin configuring the Terraform Plan for your lab, plan it first in Visio.
     You need this step in order to identify the number of links and link types (access ports or trunks) for each of the VMs.
 
-    For each link, note whether it will be access or trunk and give it an ID starting with 101 and incrementing. Each link ID should be unique, but you can have an access port and a trunk port with the same ID.
+    For each link, note whether it will be access or trunk and give it an ID starting with 101 and incrementing sequentially. Each link ID should be unique, but you can have an access port and a trunk port with the same ID.
     
     **Example:** The Terraform variable file provided would create the following topology-
 
