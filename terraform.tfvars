@@ -35,7 +35,7 @@ server_template  = "Rocky Linux 8.4 Minimal"
 #   ____) |  __/ (__| |_| | | |  __/ |____| | \ \  | |   
 #  |_____/ \___|\___|\__,_|_|  \___|\_____|_|  \_\ |_|   
 # If not set to null, this will cause the script to create a SecureCRT folder (using var.folder) and add sessions for all the network elements based on console_telnet_port
-securecrt_path = "/mnt/c/users/AJCRUZ/Dropbox/Secure CRT Config"
+securecrt_path = "/mnt/c/users/AJCRUZ/OneDrive - COMPUTACENTER/Secure CRT Config"
 
 
 #   _           _        _____         _ _       _               

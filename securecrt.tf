@@ -1,15 +1,3 @@
-variable "securecrt_path" {
-  type = string
-}
-
-#  .oooooo..o                                                      .oooooo.   ooooooooo.   ooooooooooooo 
-# d8P'    `Y8                                                     d8P'  `Y8b  `888   `Y88. 8'   888   `8 
-# Y88bo.       .ooooo.   .ooooo.  oooo  oooo  oooo d8b  .ooooo.  888           888   .d88'      888      
-#  `"Y8888o.  d88' `88b d88' `"Y8 `888  `888  `888""8P d88' `88b 888           888ooo88P'       888      
-#      `"Y88b 888ooo888 888        888   888   888     888ooo888 888           888`88b.         888      
-# oo     .d8P 888    .o 888   .o8  888   888   888     888    .o `88b    ooo   888  `88b.       888      
-# 8""88888P'  `Y8bod8P' `Y8bod8P'  `V88V"V8P' d888b    `Y8bod8P'  `Y8bood8P'  o888o  o888o     o888o     
-                                                                                                       
 # Create the Lab folder in SecureCRT Sessions folder if var.securecrt_path is defined
 # This is a total hack and not at all the intended use case for provisioners.
 # Normally variables are not accessible to destroy provisioners. Only self, count, and each.keys are available.
@@ -40,7 +28,7 @@ resource "null_resource" "switch_securecrt_session" {
   ]
 
   for_each = {
-    for vm in var.n9ks : vm.name => vm
+    for vm in var.n9ks : vm.name => vm if var.securecrt_path != null
   }
 
   provisioner "local-exec" {
@@ -54,7 +42,7 @@ resource "null_resource" "router_securecrt_session" {
   ]
 
   for_each = {
-    for vm in var.routers : vm.name => vm
+    for vm in var.routers : vm.name => vm if var.securecrt_path != null
   }
 
   provisioner "local-exec" {

@@ -1,35 +1,3 @@
-variable "nexus_switch_ova" {
-  type = string
-}
-
-variable "router_template" {
-  type = string
-}
-
-variable "server_template" {
-  type = string
-}
-
-variable "n9ks" {
-  type = list(object({
-    name                = string
-    console_telnet_port = string
-    interfaces          = map(string)
-  }))
-}
-
-variable "routers" {
-  type = list(object({
-    name                = string
-    console_telnet_port = string
-    interfaces          = map(string)
-  }))
-}
-
-variable "servers" {
-  type = list(map(string))
-}
-
 # Create the Lab folder in vSphere
 resource "vsphere_folder" "labfolder" {
   path          = var.folder

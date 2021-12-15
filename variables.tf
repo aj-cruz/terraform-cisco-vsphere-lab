@@ -1,20 +1,3 @@
-terraform {
-  required_providers {
-    vsphere = {
-      # hashicorp/vsphere provider documentation: https://registry.terraform.io/providers/hashicorp/vsphere/latest/docs
-      source  = "hashicorp/vsphere"
-      version = ">= 2.0.2"
-    }
-  }
-}
-
-provider "vsphere" {
-  user                 = var.vc_user
-  password             = var.vc_pass
-  vsphere_server       = var.vc_host
-  allow_unverified_ssl = true
-}
-
 variable "vc_host" {
   description = "vCenter hostname or IP"
   type        = string
@@ -55,4 +38,44 @@ variable "cluster" {
 variable "folder" {
   description = "The vSphere folder where VMs will be created"
   type        = string
+}
+
+variable "mgmt_port_group" {
+  type = string
+}
+
+variable "nexus_switch_ova" {
+  type = string
+}
+
+variable "router_template" {
+  type = string
+}
+
+variable "server_template" {
+  type = string
+}
+
+variable "n9ks" {
+  type = list(object({
+    name                = string
+    console_telnet_port = string
+    interfaces          = map(string)
+  }))
+}
+
+variable "routers" {
+  type = list(object({
+    name                = string
+    console_telnet_port = string
+    interfaces          = map(string)
+  }))
+}
+
+variable "servers" {
+  type = list(map(string))
+}
+
+variable "securecrt_path" {
+  type = string
 }

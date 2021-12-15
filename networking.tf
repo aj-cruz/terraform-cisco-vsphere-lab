@@ -1,7 +1,3 @@
-variable "mgmt_port_group" {
-  type = string
-}
-
 # To determine the amount of access and trunk port groups to create we do the following:
 # 1. Create a flattened list of all switch ports defined (exclude null ports) - local.sw_ports
 # 2. Create a flattened list of all router ports defined (exclude null ports) - local.rtr_ports
