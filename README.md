@@ -34,10 +34,11 @@ This project attempts to strike a balance between the two. It will deploy a Cisc
 ```
 ├──ova-repo                             ---Folder for storing OVAs
 ├──provision_scripts                    ---Folder that holds scripts and templates used during resource provisioning
-│  ├──securecrt_session_file.py          ---Python script used to generate SecureCRT session files for each network device
-│  └──securecrt_session_template.tpl     ---SecureCRT session INI file used to generate a device-specific session INI file for each network device
-├──lab-variables.auto.tfvars            ---Terraform variables file. This is the file that describes/defines the desired lab structure
-├──vsphere.tf                           ---Terraform Plan File: Provider configuration and vSphere-related variable definitions
+│  ├──securecrt_session_file.py         ---Python script used to generate SecureCRT session files for each network device
+│  └──securecrt_session_template.tpl    ---SecureCRT session INI file used to generate a device-specific session INI file for each network device
+├──terraform.tfvars                     ---Terraform variables file. This is the file that describes/defines the desired lab structure
+├──variables.tf                         ---Terraform Plan File: All variable definitions
+├──providers.tf                         ---Terraform Plan File: Provider configuration
 ├──datasources.tf                       ---Terraform Plan File: data sources required for resource creation
 ├──networking.tf                        ---Terraform Plan File: vSphere network configuration
 ├──VMs.tf                               ---Terraform Plan File: vSphere VM deployment
