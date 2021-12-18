@@ -11,7 +11,7 @@ esxi_host = "phys-esxi.ajlab.local"
 dc        = "AJLAB"
 datastore = "datastore1"
 cluster   = "Compute"
-folder    = "My TF Lab1"    # This will also be used in the naming of all vSphere network objects (vSwitches & port groups). Any whitespace will be replaced with dashes in the object name.
+folder    = "VxLAN Lab"    # This will also be used in the naming of all vSphere network objects (vSwitches & port groups). Any whitespace will be replaced with dashes in the object name.
 mgmt_port_group  = "oob-mgmt-1"   # This should be an existing port group in vSphere 
 
 
@@ -44,7 +44,7 @@ securecrt_path = "/mnt/c/users/AJCRUZ/OneDrive - COMPUTACENTER/Secure CRT Config
 #  | |    / _` | '_ \   \___ \ \ /\ / / | __/ __| '_ \ / _ \/ __|
 #  | |___| (_| | |_) |  ____) \ V  V /| | || (__| | | |  __/\__ \
 #  |______\__,_|_.__/  |_____/ \_/\_/ |_|\__\___|_| |_|\___||___/
-# Values for eth ports should either be null or take the format access|trunk-{{link_id}}
+# Values for eth ports should either be null or take the format access|trunk-{{link_name}}
 # Every interface must have a port group defined, If null is used, the port group assigned to var.mgmt_port_group will be assigned
 # IMPORTANT NOTES: The interface keys MUST begin with "eth" and be numbered sequentially starting with 1. Example: eth1
 #   This is important for the provisioning script to be able to disconnect unused (null) interfaces.
@@ -53,38 +53,39 @@ securecrt_path = "/mnt/c/users/AJCRUZ/OneDrive - COMPUTACENTER/Secure CRT Config
 #   Modifying existing interface port groups will not cause a power cycle, but if it was previously disconnected it will not auto-connect.
 n9ks = [
   {
-    name                = "SVRAGG1"
+    name                = "SPINE1"
     console_telnet_port = "2001"
     interfaces = {
-      eth1 = "access-101"
-      eth2 = "trunk-103"
+      eth1 = "access-dc1-leaf1-2-spine1"
+      eth2 = null
       eth3 = null
       eth4 = null
       eth5 = null
-      eth6 = "trunk-101"
-      eth7 = "trunk-102"
+      eth6 = null
+      eth7 = null
     }
   },
   {
-    name                = "SVRAGG2"
+    name                = "SPINE2"
     console_telnet_port = "2002"
     interfaces = {
-      eth1 = "access-102"
-      eth2 = "trunk-104"
+      eth1 = "access-dc1-leaf1-2-spine2"
+      eth2 = null
       eth3 = null
       eth4 = null
       eth5 = null
-      eth6 = "trunk-101"
-      eth7 = "trunk-102"
+      eth6 = null
+      eth7 = null
     }
   },
   {
-    name                = "ACCESS1"
+    name                = "LEAF1"
     console_telnet_port = "2003"
     interfaces = {
-      eth1 = "access-101"
-      eth2 = "access-102"
-      eth3 = "access-103"
+      eth1 = "access-dc1-leaf1-2-spine1"
+      eth2 = "access-dc1-leaf1-2-spine2"
+      eth3 = "access-dc1-leaf1-2-v101svr1"
+      eth4 = "trunk-dc1-leaf1-2-core1"
     }
   }
 ]
@@ -102,8 +103,8 @@ routers = [
     console_telnet_port = "2004"
     interfaces = {
       eth1 = null
-      eth2 = "trunk-103"
-      eth3 = "trunk-104"
+      eth2 = "trunk-dc1-leaf1-2-core1"
+      eth3 = null
     }
   }
 ]
@@ -119,7 +120,7 @@ servers = [
   {
     name       = "v101-svr1"
     domain     = "ajlab.local"
-    eth0       = "access-103"
+    eth0       = "access-dc1-leaf1-2-v101svr1"
     eth0_ip    = "10.1.1.101/24"
     gateway_ip = "10.1.1.1"
   }

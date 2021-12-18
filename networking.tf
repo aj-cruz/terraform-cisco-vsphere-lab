@@ -53,7 +53,7 @@ resource "vsphere_host_virtual_switch" "vss-access" {
 # Add vSS Switches for trunk PGs (one switch per PG, otherwise CDP on the virtual switches is screwy)
 resource "vsphere_host_virtual_switch" "vss-trunk" {
   count                    = length(local.trunk_ports)
-  name                     = "tf-${lower(replace(var.folder, " ", "-"))}-trunk${count.index + 101}"
+  name                     = "tf-${lower(replace(var.folder, " ", "-"))}-trunk${count.index}"
   host_system_id           = data.vsphere_host.host.id
   network_adapters         = []
   active_nics              = []
@@ -71,10 +71,10 @@ resource "vsphere_host_port_group" "access-pg" {
     vsphere_host_virtual_switch.vss-access
   ]
   count               = length(local.access_ports)
-  name                = "tf-${lower(replace(var.folder, " ", "-"))}-access${count.index + 101}"
+  name                = "tf-${lower(replace(var.folder, " ", "-"))}-${local.access_ports[count.index]}"
   host_system_id      = data.vsphere_host.host.id
   virtual_switch_name = "tf-${lower(replace(var.folder, " ", "-"))}-access"
-  vlan_id             = count.index + 101
+  vlan_id             = count.index + 100
 }
 
 # Add Trunk PGs (one per "trunk vSS")
@@ -83,8 +83,8 @@ resource "vsphere_host_port_group" "trunk-pg" {
     vsphere_host_virtual_switch.vss-trunk
   ]
   count               = length(local.trunk_ports)
-  name                = "tf-${lower(replace(var.folder, " ", "-"))}-trunk${count.index + 101}"
+  name                = "tf-${lower(replace(var.folder, " ", "-"))}-${local.trunk_ports[count.index]}"
   host_system_id      = data.vsphere_host.host.id
-  virtual_switch_name = "tf-${lower(replace(var.folder, " ", "-"))}-trunk${count.index + 101}"
+  virtual_switch_name = "tf-${lower(replace(var.folder, " ", "-"))}-trunk${count.index}"
   vlan_id             = 4095
 }

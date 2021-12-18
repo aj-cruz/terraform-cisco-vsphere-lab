@@ -79,7 +79,7 @@ In addition to installing the required software, the following environment confi
 1. Before you begin configuring the Terraform Plan for your lab, plan it first in Visio.
     You need this step in order to identify the number of links and link types (access ports or trunks) for each of the VMs.
 
-    For each link, note whether it will be access or trunk and give it an ID starting with 101 and incrementing sequentially. Each link ID should be unique, but you can have an access port and a trunk port with the same ID.
+    For each link, note whether it will be access or trunk and give the link a name starging with "access-" for access links or "trunk-" for trunk links. Interfaces configured with the same link name will be connected to each other.
     
     **Example:** The Terraform variable file provided would create the following topology-
 
@@ -93,7 +93,7 @@ Standard vSphere configuration parameters. A few notes:
 - **esxi_host**: The physical ESXi host where standard vSwitches & associated port groups will be created. This will also be used in the telnet URI of the serial device attached to VMs (see **Lab Switches** and **Lab Routers** sections below).
 - **folder**: The folder variable will create a VM folder in the root of your DC with that name where lab VMs will be created. This will also be used in the naming of vSphere network objects. The VM folder will be named as provided, but vSwitches and port groups will replace any whitespace in the lab folder with a dash and force the string to all lowercase. The objects will be prepended with "tf-"
 
-    **Example**: ```folder    = "DCNM Lab"``` may produce a vSphere port group named "tf-dcnm-lab-access-101"
+    **Example**: ```folder    = "DCNM Lab"``` may produce a vSphere port group named "tf-dcnm-lab-access-some-port-group"
 
     **Make sure your lab folder is unique so that the Terraform plan doesn't try to create duplicate objects**
 - **mgmt_port_grp**: This should be an existing port group in your vSphere environment. The management port of Nexus switches will be attached to this port group. Additionally, it serves as a default port group. Any interfaces set to ```null``` will be attached to this port group and the interface will be disconnected.
@@ -168,7 +168,7 @@ n9ks = [
 ```
 
 - **name**: This will be used to create the VM name in vSphere
-- **console_telnet_port**: govc will be used to add a network-backed serial device to each switch VM. The serial device will be configured by the govc command as a server with a telnet URI using the ESXi hostname or IP address you supplied in the **vSphere Config** section.
+- **console_telnet_port**: govc will be used to add a network-backed serial device to each switch VM. The serial device will be configured by the govc command as a server with a telnet URI using the ESXi hostname or IP address you supplied in the **vSphere Config** section. You will need to make sure this telnet port doesn't conflict with any other lab devices on the ESXi host where the VM runs.
 
     The serial device's telnet URI will use the format: **telnet://{{esxi_host}}:{{console_telnet_port}}**
 
@@ -179,7 +179,7 @@ n9ks = [
     - Interface keys (names) **MUST** use the format **eth{{#}}** and be numbered sequentially starting with 1 as shown in the switch definition example above.
     - **Do not supply real vSphere port groups as the interface values**.
 
-        The Interface value must either be nulll, or use the format **access-{{id}}** for access ports or **trunk-{{id}}** for trunk ports. The IDs need to start with 101.
+        The Interface value must either be nulll, or use the format **access-{{name}}** for access ports or **trunk-{{name}}** for trunk ports. The {{name}} portion can be any arbitrary string to identify the link.
 
         If "access-" is used to define the link, the Terraform Plan will create a vSphere port group with a single VLAN ID for use with interfaces that are untagged.
 
@@ -188,7 +188,7 @@ n9ks = [
         Interfaces with the same value will be connected to each other. In the switch definition example above, SVRAGG1 port eth1 would be connected to ACCESS1 port eth1 using an access port group. eth1 on the two switches will not use tagging.
 
     **Notes:**
-    - The Terraform Plan logic counts the unique instances of **access-{{id}}** and **trunk-{{id}}** to determine the quantity of each Port Group type to create in vSphere.
+    - The Terraform Plan logic counts the unique instances of **access-{{name}}** and **trunk-{{name}}** to determine the quantity of each Port Group type to create in vSphere.
 
     - If the value is ```null``` the Terraform Plan logic will attach to this interface the vSphere Port Group assigned to ```var.mgmt_port_group``` in the **vSphere Config** section **AND** it will configure the VM interfce as disconnected. Here's why this functionality was created:
         - Adding or removing interfaces to the Terraform Plan will cause the VM to be powered down for the operation. I wanted the ability to create unused interfaces that might be used later on without having to power cycle the device.

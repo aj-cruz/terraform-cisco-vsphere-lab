@@ -48,7 +48,7 @@ resource "vsphere_virtual_machine" "Nexus-9Ks" {
     for_each = each.value.interfaces
 
     content {
-      network_id   = network_interface.value == null ? data.vsphere_network.mgmt.id : (length(regexall("access-", network_interface.value)) > 0 ? data.vsphere_network.access-ports[tonumber(trimprefix(network_interface.value, "access-")) - 101].id : (length(regexall("trunk-", network_interface.value)) > 0 ? data.vsphere_network.trunk-ports[tonumber(trimprefix(network_interface.value, "trunk-")) - 101].id : (data.vsphere_network.mgmt.id)))
+      network_id   = network_interface.value == null ? data.vsphere_network.mgmt.id : (length(regexall("access-", network_interface.value)) > 0 ? data.vsphere_network.access-ports[network_interface.value].id : (length(regexall("trunk-", network_interface.value)) > 0 ? data.vsphere_network.trunk-ports[network_interface.value].id : (data.vsphere_network.mgmt.id)))
       adapter_type = "e1000"
     }
   }
@@ -122,7 +122,7 @@ resource "vsphere_virtual_machine" "routers" {
     for_each = each.value.interfaces
 
     content {
-      network_id   = network_interface.value == null ? data.vsphere_network.mgmt.id : (length(regexall("access-", network_interface.value)) > 0 ? data.vsphere_network.access-ports[tonumber(trimprefix(network_interface.value, "access-")) - 101].id : (length(regexall("trunk-", network_interface.value)) > 0 ? data.vsphere_network.trunk-ports[tonumber(trimprefix(network_interface.value, "trunk-")) - 101].id : (data.vsphere_network.mgmt.id)))
+      network_id   = network_interface.value == null ? data.vsphere_network.mgmt.id : (length(regexall("access-", network_interface.value)) > 0 ? data.vsphere_network.access-ports[network_interface.value].id : (length(regexall("trunk-", network_interface.value)) > 0 ? data.vsphere_network.trunk-ports[network_interface.value].id : (data.vsphere_network.mgmt.id)))
       adapter_type = "vmxnet3"
     }
   }
@@ -188,7 +188,7 @@ resource "vsphere_virtual_machine" "servers" {
   }
 
   network_interface {
-    network_id   = data.vsphere_network.access-ports[tonumber(trimprefix(each.value.eth0, "access-")) - 101].id
+    network_id   = data.vsphere_network.access-ports[each.value.eth0].id
     adapter_type = data.vsphere_virtual_machine.server_template.network_interface_types[0]
   }
 

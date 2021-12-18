@@ -45,8 +45,10 @@ data "vsphere_network" "access-ports" {
   depends_on = [
     vsphere_host_port_group.access-pg
   ]
-  count         = length(local.access_ports)
-  name          = "tf-${lower(replace(var.folder, " ", "-"))}-access${count.index + 101}"
+  for_each = {
+    for int in local.access_ports : int => int
+  }
+  name          = "tf-${lower(replace(var.folder, " ", "-"))}-${each.key}"
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
@@ -54,7 +56,9 @@ data "vsphere_network" "trunk-ports" {
   depends_on = [
     vsphere_host_port_group.trunk-pg
   ]
-  count         = length(local.trunk_ports)
-  name          = "tf-${lower(replace(var.folder, " ", "-"))}-trunk${count.index + 101}"
+  for_each = {
+    for int in local.trunk_ports : int => int
+  }
+  name          = "tf-${lower(replace(var.folder, " ", "-"))}-${each.key}"
   datacenter_id = data.vsphere_datacenter.dc.id
 }

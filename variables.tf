@@ -62,6 +62,15 @@ variable "n9ks" {
     console_telnet_port = string
     interfaces          = map(string)
   }))
+
+  validation {
+    condition = alltrue(flatten([
+      for dev in var.n9ks : [
+        for int_key, int in dev.interfaces : substr(int, 0, 7) == "access-" ? true : (substr(int, 0, 6) == "trunk-" ? true : false) if int != null
+      ]
+  ]))
+    error_message = "Nexus 9K interface values must begin with one of: 'access-' or 'trunk-' or be set to null."
+  }
 }
 
 variable "routers" {
@@ -70,10 +79,26 @@ variable "routers" {
     console_telnet_port = string
     interfaces          = map(string)
   }))
+
+validation {
+    condition = alltrue(flatten([
+      for dev in var.routers : [
+        for int_key, int in dev.interfaces : substr(int, 0, 7) == "access-" ? true : (substr(int, 0, 6) == "trunk-" ? true : false) if int != null
+      ]
+  ]))
+    error_message = "Router interface values must begin with one of: 'access-' or 'trunk-' or be set to null."
+  }
 }
 
 variable "servers" {
   type = list(map(string))
+
+  validation {
+    condition = alltrue([
+      for dev in var.servers : substr(dev.eth0, 0, 7) == "access-" ? true : (substr(dev.eth0, 0, 6) == "trunk-" ? true : false) if dev.eth0 != null
+  ])
+    error_message = "Server interface value must begin with one of: 'access-' or 'trunk-' or be set to null."
+  }
 }
 
 variable "securecrt_path" {
